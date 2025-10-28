@@ -1,0 +1,33 @@
+**Data Loading and Preparation:**
+- Data from the four companies IBM, Google, Amazon, and Microsoft was successfully loaded and combined into a single DataFrame.
+- The joining of DataFrame is done on the basis of date column.
+- Missing values were identified and handled by dropping the rows with missing data.
+
+**Analysis and Visualization:**
+- The frequency distribution of stock volumes showed varying patterns across the companies.
+- The stock volume variation over time indicated fluctuations and trends specific to each company.
+- The correlation matrix revealed high correlations between the 'Open', 'High', 'Low', and 'Close' prices for each individual stock, as expected.
+- There were also varying levels of correlation between the prices of different stocks, suggesting that they are influenced by similar market factors. Volume, on the other hand, showed weaker correlations with the price features.
+- IBM has significantly lower correlation with other companies.
+
+**Data Processing for RNNs:**
+- A `create_windowed_data()` function was implemented to create sequences of data (windows) for training the RNN models. A window size of 5 and a stride of 1 were used.
+- A `scale_windowed_data()` function was used to scale the data within each window using `MinMaxScaler` to prevent data leakage.
+- The `prepare_rnn_data()` function combined these steps and split the data into training and testing sets (70% train, 30% test).
+
+**RNN Models and Hyperparameter Tuning:**
+- Both a Simple RNN and an LSTM model were built and tuned using a grid search over different hyperparameters (units, epochs, batch size, and number of layers).
+- The best hyperparameters for the Simple RNN model were {'units': 30, 'epochs': 25, 'batch_size': 64, 'num_layers': 1}, resulting in a validation MSE of 0.9121.
+- The best hyperparameters for the LSTM model were {'units': 50, 'epochs': 25, 'batch_size': 64, 'num_layers': 2}, resulting in a validation MSE of 0.8761.
+
+**Model Performance:**
+- The Simple RNN model achieved a Mean Squared Error (MSE) of 0.9171 and a Root Mean Squared Error (RMSE) of 0.9577 on the test data.
+- The LSTM model achieved a Mean Squared Error (MSE) of 0.9872 and a Root Mean Squared Error (RMSE) of 0.9936 on the test data.
+
+Based on the validation MSE during hyperparameter tuning, the LSTM model with 2 layers and 50 units performed slightly better than the Simple RNN model. However, the final evaluation on the test set showed a slightly higher MSE for the LSTM model in this particular run. It's important to note that due to the stochastic nature of neural network training, results can vary between runs.
+
+**Further Improvements:**
+- **Different Window Sizes and Strides:** Experiment with different window sizes and strides to capture longer or shorter-term dependencies in the data.
+- **Larger Hyperparameter Search Space:** Expand the range of hyperparameters and use more sophisticated tuning techniques (e.g., random search, Bayesian optimization).
+- **Cross-Validation:** Implement time series cross-validation to get a more robust estimate of model performance.
+- **Predicting Other Metrics:** Instead of just the closing price, the models could be extended to predict other metrics like the next day's opening price, high, low, or volume.
